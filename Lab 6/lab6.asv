@@ -1,0 +1,32 @@
+% Pre-emphasis filter for speech signal
+
+% Read the input speech signal
+[inputSignal, fs] = audioread('mecidiye.wav'); % Replace 'input.wav' with your audio file
+inputSignal = inputSignal(1:35*fs);
+
+% Define the pre-emphasis filter coefficient
+preEmphasis = 0.97; % Commonly used value
+
+% Apply the pre-emphasis filter using the difference equation
+% y(n) = x(n) - a * x(n-1)
+preEmphasizedSignal = filter([1 -preEmphasis], 1, inputSignal);
+
+% Plot the original and pre-emphasized signals for comparison
+t = (0:length(inputSignal)-1)/fs;
+
+figure;
+subplot(2,1,1);
+plot(t, inputSignal);
+title('Original Speech Signal');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+subplot(2,1,2);
+plot(t, preEmphasizedSignal);
+title('Pre-emphasized Speech Signal');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+% Save the pre-emphasized signal to a new audio file
+audiowrite('pre_emphasized_mecidiye.wav', preEmphasizedSignal, fs);
+audio(preEmphasizedSignal)
